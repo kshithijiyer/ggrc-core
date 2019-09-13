@@ -1,0 +1,79 @@
+{{!
+    Copyright (C) 2019 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<div class="modal-header">
+  <a class="modal-dismiss pull-right" href="javascript://" data-dismiss="modal">
+    <i class="fa fa-times black"></i>
+  </a>
+  <h2>
+    Bulk Complete
+  </h2>
+</div>
+<div class="modal-section">
+  <collapsible-panel softMode:from="true" titleText:from="'Filter'" expanded:bind="showSearch">
+    <advanced-search-container
+      modelName:from="type"
+      statesCollectionKey:from="statesCollectionKey"
+      disabled:from="is_loading"
+      mappedToItems:from="mappedToItems"
+      filterItems:to="filterItems"
+      mappingItems:to="mappingItems"
+      on:vm:onSubmit="onSubmit()">
+        <can-template name="mapped-to-section">
+          {{#isMyAssessmentsView}}
+            <h6 class="spacing-top">My Assessments</h6>
+          {{/isMyAssessmentsView}}
+        </can-template>
+    </advanced-search-container>
+  </collapsible-panel>
+</div>
+
+<div class="modal-section modal-footer">
+  <collapsible-panel softMode:from="true" titleText:from="'Select assessments to complete in bulk ({{entriesTotalCount}})'" expanded:bind="showResults">
+    <div class="search-results">
+      {{#if resultsRequested}}
+        <mapper-results
+          type:from="type"
+          selected:from="selected"
+          filterItems:from="filterItems"
+          mappingItems:from="mappingItems"
+          relevantTo:from="mappedToItems"
+          @onSearch:to="onSearchCallback"
+          paging.total:to="entriesTotalCount"
+          isLoading:bind="is_loading"
+          items:bind="entries"
+          on:vm:loaded="onLoaded()" />
+
+        <div class="control-buttons">
+          <div class="confirm-buttons">
+            <spinner-component toggle:from="is_saving" />
+            <span class="confirm-buttons__objects-count">
+              {{selected.length}}
+              object(s) selected
+            </span>
+            <button type="button" class="btn btn-small btn-darkBlue"
+              {{^if selected.length}}disabled="disabled"{{/if}}>
+              {{#if is_saving}}
+                Saving, please wait...
+              {{else}}
+                Select
+              {{/if}}
+            </button>
+          </div>
+        </div>
+      {{else}}
+        <div class="well well-small">
+          No results
+        </div>
+      {{/if}}
+    </div>
+  </collapsible-panel>
+</div>
+
+<div class="modal-section">
+  <collapsible-panel softMode:from="true" titleText:from="'Provide information below to finish bulk completion of assessments'" expanded:bind="showFields">
+  </collapsible-panel>
+</div>
+
