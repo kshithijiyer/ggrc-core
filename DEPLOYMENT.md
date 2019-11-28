@@ -1,5 +1,5 @@
 # Deployment instructions
-=========================
+
 
 Document describing version-specific steps that need to happen before or after
 deployment of specific version to production.
